@@ -3,26 +3,28 @@
 ### Search Operations
 | **Operation** |  **Description** | **URL** | ***NOTES*** |
 | :--- | :--- | :--- | :--- |
-| `exactquery` | Return the search results that match exactly (i.e. performing an AND between the exact words) <querystring>.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=exactquery&q=`querystring`&ip=`IP address`&filetype=`extension` ||
-| `orquery` | Return the search results that match the single exact words in <querystring>.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=orquery&q=`querystring&ip=`IP address`&filetype=`extension` ||
-| `likequery` | Return search results by performing variations on the words in `querystring`, limiting to no more than `word limit` words.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=likequery&q=`querystring`&words=`word limit`&ip=`IP address`&filetype=`extension` ||
-| `query` | Return search results by applying in order the exactquery, orquery and likequery operations, trying to retrieve at least `nresults` results.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=query&q=`querystring`&nresults=`nresults`&ip=`IP address`&filetype=`extension` | Default value of `nresults` is `200` |
-| `whatsnew` | Return the resources that have been recently discovered, trying to retrieve at least <nresults> results, but no more than `nresults` | /json.cgi?op=whatsnew&nresults=`nresults` | Default value for `nresults` is `200` |
-| `serverlist` | Return the list of found servers | /json.cgi?op=`serverlist` ||
-***
-### Other Operations
+| `exactquery` | Return the search results that match exactly (i.e. performing an AND between the exact words) <querystring>.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=**exactquery**&q=`querystring`&ip=`IP address`&filetype=`extension` ||
+| `orquery` | Return the search results that match the single exact words in *querystring*.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=**orquery**&q=`querystring`&ip=`IP address`&filetype=`extension` ||
+| `likequery` | Return search results by performing variations on the words in `querystring`, limiting to no more than `word limit` words.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=**likequery**&q=`querystring`&words=`word limit`&ip=`IP address`&filetype=`extension` ||
+| `query` | Return search results by applying in order the exactquery, orquery and likequery operations, trying to retrieve at least `nresults` results.<br />The optional parameter `ip` restricts the search to a given server IP address.<br />The optional parameter `filetype` restricts the search to a given filetype/extension. | /json.cgi?op=**query**&q=`querystring`&nresults=`nresults`&ip=`IP address`&filetype=`extension` | Default value of `nresults` is `200` |
+| `whatsnew` | Return the resources that have been recently discovered, trying to retrieve at least <nresults> results, but no more than `nresults` | /json.cgi?op=**whatsnew**&nresults=`nresults` | Default value for `nresults` is `200` |
+| `serverlist` | Return the list of found servers | /json.cgi?op=**serverlist** ||
+
+#### Other Operations
 | **Operation** |  **Description** | **URL** |
 | :--- | :--- | :--- | :--- |
-| `resourcestats` | *Return the total number of resources currently indexed by the Search Engine* | /json.cgi?op=`resourcestats` |
-| `serverstats` | *Return the total number of servers currently indexed by the Search Engine* | /json.cgi?op=`serverstats` |
+| `resourcestats` | Return the total number of resources currently indexed by the Search Engine | /json.cgi?op=**resourcestats** |
+| `serverstats` | Return the total number of servers currently indexed by the Search Engine | /json.cgi?op=**serverstats** |
 
-### Other Operations (Response/Result Format)
+#### Other Operations (Response/Result Format)
 | **Operation** |  **Description** |
 | :--- | :--- |
-| `responsen` | *Response number* |
-| `response` | *Response description* |
-| `result` | *Result |
+| `responsen` | Response number |
+| `response` | Response description |
+| `result` | Result |
+
 ***
+
 ### Search Results Format
 | **Operation** | **Values** *or* **Description** |
 | :--- | :--- |
@@ -40,7 +42,7 @@
 | `file type` | *The resource's file type* |
 
 #### Example
-```json
+```jsonp
 {
     responsen: <response number>,
     response: <response description>,
