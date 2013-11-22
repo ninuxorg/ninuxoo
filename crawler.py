@@ -5,15 +5,15 @@ from ftpdrone import *
 import threading
 import sys
 
-MAXTHREADS = 128
 
 class DanceManager():
 		def __init__(self):
 				self.__dancercount = 0
 				self.__dancerlock = threading.Condition()
+				self.MAXTHREADS = 128
 		def launchDancer(self, ip, urisilos):
 				self.__dancerlock.acquire()
-				while self.__dancercount >= MAXTHREADS:
+				while self.__dancercount >= self.MAXTHREADS:
 						self.__dancerlock.wait()
 				sd = SambaDancer(ip, urisilos, self)
 				sd.daemon = True
@@ -28,7 +28,7 @@ class DanceManager():
 				self.__dancercount -= 1
 				threaddiff = self.__dancercount - threading.active_count()
 				if threaddiff > 0:
-						MAXTHREADS += threaddiff
+						self.MAXTHREADS += threaddiff
 				self.__dancerlock.notify()
 				self.__dancerlock.release()
 

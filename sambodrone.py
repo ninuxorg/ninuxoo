@@ -81,8 +81,8 @@ class SambaDancer(threading.Thread):
 						self.dance(self.uri)
 						print "results for %s gathered" % self.target
 				except:
-						raise
 						print "%s error" % self.target
+						raise
 				print "[%d] finish" % self.ident
 				self.dancemanager.dyingDancer()
 
