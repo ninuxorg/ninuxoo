@@ -117,6 +117,17 @@ class Resource():
 						res = self.uri
 				return res
 
+		def getServer(self):
+				return self.server
+
+		def getPath(self):
+				splituri = self.uri.split('/')
+				try:
+						res = "/".join(splituri[4:-1])
+				except IndexError:
+						res = ""
+				return res
+
 		def getShare(self):
 				splituri = self.uri.split('/')
 				try:
@@ -250,6 +261,9 @@ class ResourceTrie():
 								'filename': resource.getFilename(), 
 								'filetype': resource.filetype,
 								'filesize': resource.getFileSize(),
+								'server': resource.getServer(),
+								'share': resource.getShare(),
+								'path': resource.getPath(),
 								})
 
 				reschildren = list()

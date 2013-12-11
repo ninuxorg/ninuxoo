@@ -51,7 +51,13 @@
 				res1 += "<ul>" 
 				$.each(resourcetrie.resources, function(index, resource) {
 						res1 += '<li class="result"><span class="file"><a href="';
-						res1 += resource.uri;
+						/*res1 += resource.uri;*/
+						res1 += "/cgi-bin/samba/smbfile.pl/"
+						res1 += resource.server + "/"
+						res1 += resource.share + "/"
+						res1 += resource.filesize + "/\\"
+						res1 += resource.path.replace("/", "\\")
+						res1 += "\\/" + resource.filename
 						res1 += '">'
 						res1 += resource.filename 
 						res1 += '</a></span></li>' 
