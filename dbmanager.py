@@ -89,6 +89,7 @@ class ResourceStorer(MysqlConnectionManager, threading.Thread):
 				spath = resource.path.strip().replace("'","\\'").encode('utf-8', errors='ignore')
 				sshare = resource.getShare().strip().replace("'","\\'").encode('utf-8', errors='ignore')
 				sfiletype = resource.filetype.strip().replace("'","\\'").encode('utf-8', errors='ignore')
+				nfilesize = resource.filesize
 				insertionstring = """
 				INSERT INTO resources (
 						uri, 
@@ -97,16 +98,18 @@ class ResourceStorer(MysqlConnectionManager, threading.Thread):
 						protocol,
 						path,
 						filetype,
+						filesize,
 						firstseen,
 						timestamp
 				) VALUES (
-				'%s', '%s', '%s', '%s', '%s', '%s', NOW(), NOW()
+				'%s', '%s', '%s', '%s', '%s', '%s', '%d', NOW(), NOW()
 				) ON DUPLICATE KEY UPDATE 
 					server = '%s',
 					share = '%s',
 					protocol = '%s',
 					path = '%s',
 					filetype = '%s',
+					filesize = '%d',
 					timestamp = NOW()
 				""" % (
 						resource.uri.strip().replace("'","\\'").encode('utf-8', errors='ignore'),
@@ -115,11 +118,13 @@ class ResourceStorer(MysqlConnectionManager, threading.Thread):
 						sprotocol,
 						spath,
 						sfiletype,
+						nfilesize,
 						sserver,
 						sshare,
 						sprotocol,
 						spath,
 						sfiletype,
+						nfilesize,
 				)
 				cursor.execute(insertionstring)
 		def __insertTags(self, cursor, uri, tag):
@@ -272,7 +277,7 @@ class QueryMaker(MysqlConnectionManager):
 				if len(tags) <=0:
 						return []
 				selectionstring = """
-				SELECT resources.uri, resources.server, resources.filetype 
+				SELECT resources.uri, resources.server, resources.filetype, resources.filesize
 				FROM resources JOIN tags ON resources.uri = tags.uri
 				WHERE (UNIX_TIMESTAMP(resources.timestamp) >= UNIX_TIMESTAMP(NOW()) - %d) """ % timediff
 				if server:
@@ -284,13 +289,13 @@ class QueryMaker(MysqlConnectionManager):
 						selectionstring += " OR tags.tag = '%s' " % tag
 				selectionstring += ") ORDER BY resources.uri DESC"
 				cursor.execute(selectionstring)
-				r = [Resource(uri=e[0], server=e[1], filetype=e[2]) for e in cursor.fetchall()]
+				r = [Resource(uri=e[0], server=e[1], filetype=e[2], filesize=e[3]) for e in cursor.fetchall()]
 				return r
 		def __andquery(self, cursor, tags, server=None, filetype=None, timediff=TIMEDIFF):
 				if len(tags) <=0:
 						return []
 				selectionstring = """
-				SELECT resources.uri, resources.server, resources.filetype 
+				SELECT resources.uri, resources.server, resources.filetype, resources.filesize
 				FROM resources JOIN tags AS t0 ON resources.uri = t0.uri """ 
 				for i in range(1,len(tags)):
 						selectionstring += "JOIN tags as t%d ON t%d.uri = t%d.uri " % (i, i-1, i)
@@ -304,7 +309,7 @@ class QueryMaker(MysqlConnectionManager):
 						selectionstring += "AND t%d.tag = '%s' " % (i, tags[i])
 				selectionstring += "ORDER BY resources.uri DESC"
 				cursor.execute(selectionstring)
-				r = [Resource(uri=e[0], server=e[1], filetype=e[2]) for e in cursor.fetchall()]
+				r = [Resource(uri=e[0], server=e[1], filetype=e[2], filesize=e[3]) for e in cursor.fetchall()]
 				return r
 		def __tagstats(self, cursor, taglist, timediff=TIMEDIFF):
 				tagdict = {}
@@ -363,14 +368,14 @@ class QueryMaker(MysqlConnectionManager):
 				return qr
 		def __getNewFiles(self, cursor, n):
 				selectionstring = """
-				SELECT resources.uri, resources.server, resources.filetype, resources.firstseen
+				SELECT resources.uri, resources.server, resources.filetype, resources.firstseen, resources.filesize
 				FROM resources
 				WHERE resources.firstseen != 0
 				ORDER BY resources.firstseen DESC
 				LIMIT %d
 				""" % n
 				cursor.execute(selectionstring)
-				r = [Resource(uri=e[0], server=e[1], filetype=e[2], firstseen=e[3]) for e in cursor.fetchall()]
+				r = [Resource(uri=e[0], server=e[1], filetype=e[2], firstseen=e[3], filesize=e[4]) for e in cursor.fetchall()]
 				return r
 
 		def exactquery(self, query):

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `resources` (
   `path` varchar(650),
   `protocol` varchar(10),
   `filetype` varchar(20),
+  `filesize` bigint unsigned default 0,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `firstseen` timestamp NOT NULL DEFAULT 0,
   PRIMARY KEY (`uri`)

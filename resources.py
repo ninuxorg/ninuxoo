@@ -11,14 +11,17 @@ class Resource():
 		protocol = ""
 		tags = set() 
 		filetype = ""
+		filesize = 0
 		firstseen = ""
-		def __init__(self, uri="", server="", comments="", protocol="", path="", filetype="", firstseen=""):
+		smbproxy = ""
+		def __init__(self, uri="", server="", comments="", protocol="", path="", filetype="", filesize=0, firstseen=""):
 				self.uri = uri.strip()
 				self.server = server
 				self.comments = comments
 				self.path = path
 				self.protocol = protocol
 				self.filetype = filetype
+				self.filesize = filesize
 				self.tags = set()
 				self.firstseen = firstseen
 		def addTags(self, newtags):
@@ -121,6 +124,9 @@ class Resource():
 				except IndexError:
 						res = ""
 				return res
+
+		def getFileSize(self):
+				return self.filesize
 
 		def __repr__(self):
 				return self.uri + " {" + self.comments + "} " + str(list(self.tags))
@@ -242,7 +248,8 @@ class ResourceTrie():
 						resresources.append({
 								'uri': resource.uri, 
 								'filename': resource.getFilename(), 
-								'filetype': resource.filetype
+								'filetype': resource.filetype,
+								'filesize': resource.getFileSize(),
 								})
 
 				reschildren = list()

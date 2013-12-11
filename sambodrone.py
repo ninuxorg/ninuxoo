@@ -57,6 +57,7 @@ class SambaDancer(threading.Thread):
 										r = Resource()
 										r.uri = smburl + "/" + e.name
 										r.server = self.target
+										r.filesize = self.ctx.stat(r.uri)[6]
 										try:
 												self.silos.addRes(r)
 										except:
